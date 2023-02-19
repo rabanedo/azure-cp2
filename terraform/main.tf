@@ -1,4 +1,4 @@
-####################################################### main.tf #######################################################
+##################################################### PROVIDERS #######################################################
 
 # INFO: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 # We strongly recommend using the required_providers block to set the

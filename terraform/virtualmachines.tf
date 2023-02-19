@@ -24,51 +24,49 @@ resource "azurerm_linux_virtual_machine" "master" {
     public_key = file(var.public_key_path)
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-  #Creamos el plan para este tipo de máquinas
-  plan {
-    name      = ""
-    product   = ""
-    publisher = ""
-  }
-  # Comando para identificar los valores a poner en la creacción de nuestras máquinas virtuales:
-  # az vm image list -f DISTRO -p PUBLISHER --all --output table
-  source_image_reference {
-    publisher = ""
-    offer     = ""
-    sku       = ""
-    version   = ""
-  }
+  os_disk                = var.os_disk
+  plan                   = var.plan
+  source_image_reference = var.source_image_reference
 }
 
-## EXAMPLE CODE DELETE ##
-resource "azurerm_linux_virtual_machine" "example" {
-  name                = "example-machine"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-  size                = "Standard_F2"
-  admin_username      = "adminuser"
+# Definimos la máquina virtual worker del AKS con todos los recursos necesarios
+resource "azurerm_linux_virtual_machine" "worker" {
+  name                  = "worker_vm"
+  resource_group_name   = azurerm_resource_group.rg.name
+  location              = azurerm_resource_group.rg.location
+  size                  = var.standard_vm
+  admin_username        = var.ssh_user
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.worker_vnic.id
   ]
 
   admin_ssh_key {
-    username   = "adminuser"
-    public_key = file("~/.ssh/id_rsa.pub")
+    username   = var.ssh_user
+    public_key = file(var.public_key_path)
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+  os_disk                = var.os_disk
+  plan                   = var.plan
+  source_image_reference = var.source_image_reference
+}
+
+# Definimos la máquina virtual webservice con todos los recursos necesarios
+resource "azurerm_linux_virtual_machine" "webservice" {
+  name                  = "webservice_vm"
+  resource_group_name   = azurerm_resource_group.rg.name
+  location              = azurerm_resource_group.rg.location
+  size                  = var.standard_vm
+  admin_username        = var.ssh_user
+  network_interface_ids = [
+    azurerm_network_interface.webservice_vnic.id
+  ]
+
+  admin_ssh_key {
+    username   = var.ssh_user
+    public_key = file(var.public_key_path)
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
-    version   = "latest"
-  }
+  os_disk                = var.os_disk
+  plan                   = var.plan
+  source_image_reference = var.source_image_reference
 }
