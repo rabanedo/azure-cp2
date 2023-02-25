@@ -1,16 +1,9 @@
 ############################################# VIRTUAL MACHINES RESOURCES ##############################################
 
-# INFO: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group
-# Definimos el grupo de recursos donde estaran asociados todos recursos que necesitemos crear
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location_name
-}
-
 # INFO:  https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine
 # Definimos la máquina virtual master del AKS con todos los recursos necesarios
 resource "azurerm_linux_virtual_machine" "master" {
-  name                  = "master_vm"
+  name                  = "master-vm"
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
   size                  = var.master_vm
@@ -24,14 +17,28 @@ resource "azurerm_linux_virtual_machine" "master" {
     public_key = file(var.public_key_path)
   }
 
-  os_disk                = var.os_disk
-  plan                   = var.plan
-  source_image_reference = var.source_image_reference
+  os_disk {
+    caching              = var.os_disk_specs.caching
+    storage_account_type = var.os_disk_specs.storage_account_type
+  }
+
+  plan {
+    name      = var.os_image_specs.name
+    product   = var.os_image_specs.product
+    publisher = var.os_image_specs.publisher
+  }
+
+  source_image_reference {
+    publisher = var.os_image_specs.publisher
+    offer     = var.os_image_specs.offer
+    sku       = var.os_image_specs.sku
+    version   = var.os_image_specs.version
+  }
 }
 
 # Definimos la máquina virtual worker del AKS con todos los recursos necesarios
 resource "azurerm_linux_virtual_machine" "worker" {
-  name                  = "worker_vm"
+  name                  = "worker-vm"
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
   size                  = var.standard_vm
@@ -45,14 +52,28 @@ resource "azurerm_linux_virtual_machine" "worker" {
     public_key = file(var.public_key_path)
   }
 
-  os_disk                = var.os_disk
-  plan                   = var.plan
-  source_image_reference = var.source_image_reference
+  os_disk {
+    caching              = var.os_disk_specs.caching
+    storage_account_type = var.os_disk_specs.storage_account_type
+  }
+
+  plan {
+    name      = var.os_image_specs.name
+    product   = var.os_image_specs.product
+    publisher = var.os_image_specs.publisher
+  }
+
+  source_image_reference {
+    publisher = var.os_image_specs.publisher
+    offer     = var.os_image_specs.offer
+    sku       = var.os_image_specs.sku
+    version   = var.os_image_specs.version
+  }
 }
 
 # Definimos la máquina virtual webservice con todos los recursos necesarios
 resource "azurerm_linux_virtual_machine" "webservice" {
-  name                  = "webservice_vm"
+  name                  = "webservice-vm"
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
   size                  = var.standard_vm
@@ -66,7 +87,21 @@ resource "azurerm_linux_virtual_machine" "webservice" {
     public_key = file(var.public_key_path)
   }
 
-  os_disk                = var.os_disk
-  plan                   = var.plan
-  source_image_reference = var.source_image_reference
+  os_disk {
+    caching              = var.os_disk_specs.caching
+    storage_account_type = var.os_disk_specs.storage_account_type
+  }
+
+  plan {
+    name      = var.os_image_specs.name
+    product   = var.os_image_specs.product
+    publisher = var.os_image_specs.publisher
+  }
+
+  source_image_reference {
+    publisher = var.os_image_specs.publisher
+    offer     = var.os_image_specs.offer
+    sku       = var.os_image_specs.sku
+    version   = var.os_image_specs.version
+  }
 }

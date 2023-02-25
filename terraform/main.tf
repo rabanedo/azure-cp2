@@ -17,6 +17,5 @@ terraform {
 provider "azurerm" {
   # Configuration options
   features {
-    prevent_deletion_if_contains_resources = true
   }
 }

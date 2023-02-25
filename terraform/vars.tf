@@ -41,8 +41,8 @@ variable "standard_vm" {
   default     = "Standard_A2_v2"
 }
 
-variable "os_disk" {
-  description = "Virtual Machine SSD Type"
+variable "os_disk_specs" {
+  description = "Virtual Machine SSD Specs"
   type        = map(string)
   default     = {
     caching              = "ReadWrite"
@@ -52,26 +52,18 @@ variable "os_disk" {
 
 # Comando para establecer los valores requeridos en la creación de la máquina virtual:
 # az vm image list -f almalinux -p almalinux -s 8-gen1 --all --output table
-variable "source_image_reference" {
-  description = "Virtual Machine Image Data"
-  type        = map(string)
-  default     = {
-    publisher = "almalinux"
-    offer     = "almalinux"
-    sku       = "8-gen1"
-    version   = "8.7.2022122801"
-  }
-}
-
 # Comando para establecer los valores requeridos en el plan para este tipo de VM:
 # az vm image show --location westeurope --urn almalinux:almalinux:8-gen1:8.7.2022122801
-variable "plan" {
-  description = "Virtual Machine Image Plan"
+variable "os_image_specs" {
+  description = "Virtual Machine Image Specs"
   type        = map(string)
   default     = {
     name      = "8-gen1"
     product   = "almalinux"
     publisher = "almalinux"
+    offer     = "almalinux"
+    sku       = "8-gen1"
+    version   = "8.7.2022122801"
   }
 }
 
@@ -135,58 +127,18 @@ variable "webservice_vnic_name" {
 
 #################################################### SECURITY VARS #####################################################
 
-# Declaramos la security_rule para la regla SSH
-variable "ssh_security_rule" {
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default = [
-    {
+# Declaramos la security_rule_conf para la  SSH/IngressController
+variable "security_rule_conf" {
+  default = {
+    "SSH Security Rule" = {
       name                       = "SSH"
       priority                   = 1001
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
       destination_port_range     = "22"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    }
-  ]
-}
-
-# Declaramos la security_rule para la regla IngressController
-variable "ic_security_rule" {
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default = [
-    {
+    },
+    "IngressController Security Rule" = {
       name                       = "IngressController"
       priority                   = 1002
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
       destination_port_range     = "3000-32767"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
     }
-  ]
+  }
 }

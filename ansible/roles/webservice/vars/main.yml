@@ -1,0 +1,20 @@
+---
+# vars file for webserver
+
+# Packages necessary to install.
+packages:
+  - podman
+  - skopeo
+  - httpd-tools
+  - openssl
+  - python3-passlib
+  - python3-pyOpenSSL
+
+# Username webservice access.
+username: rabanedo
+# Password webservice access.
+password: 1qaz2wsx
+
+# The algorithm used to generate the TLS/SSL private key.
+key_type: RSA
+...

@@ -1,1 +1,21 @@
+---
+# Upgrade SO
+- name: Upgrade SO
+  hosts: all
+  gather_facts: true
+  become: true
+  roles:
+    - sis_upgrade_host
+  tags:
+    - always
 
+# Install WS
+- name: Install WS
+  hosts: webservice
+  gather_facts: true
+  become: true
+  roles:
+    - webservice
+  tags:
+    - webservice
+...

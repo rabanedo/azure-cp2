@@ -20,3 +20,39 @@ Se debe realizar de forma automática mediante Ansible la instalación y configu
 
 - Un (1) servidor Web desplegado en forma de contenedor de Podman sobre una máquina virtual en Azure.
 - Una (1) aplicación con almacenamiento persistente sobre el cluster AKS.
+
+## Formato del Repositorio Git
+
+El repositorio debe tener el siguiente formato:
+
+```
+├── ansible
+│   ├── deploy.sh
+│   ├── hosts
+│   ├── playbook.yml
+└── terraform
+    ├── vars.tf
+    ├── main.tf
+    └── recursos.tf
+```
+
+
+El directorio **ansible** debe contener:
+
+* deploy.sh - Script de bash que ejecuta el playbook de Ansible.
+
+* hosts - Fichero de inventario
+
+* playbook.yml - Uno o más ficheros de playbook.
+
+El directorio **terraform** debe incluir:
+
+* vars.tf - Fichero que incluye al menos las siguientes variables:
+
+```
+variable "location" {
+  type = string
+  description = "Región de Azure donde crearemos la infraestructura"
+  default = "<YOUR REGION>" 
+}
+

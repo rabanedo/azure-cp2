@@ -1,0 +1,8 @@
+[all:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no' #para que no pida validación primera vez
+[masters]
+master-vm ansible_host=20.117.80.43 nombre_dominio=master-vm internal_ip=10.0.40.8 ansible_user=azureuser
+[workers]
+worker-vm ansible_host=20.117.80.89 nombre_dominio=worker-vm internal_ip=10.0.40.14 ansible_user=azureuser
+[webservice]
+webservice-vm ansible_host=20.117.80.23 nombre_dominio=webservice-vm internal_ip=10.0.40.18 ansible_user=azureuser

@@ -1,0 +1,6 @@
+---
+# defaults file for webserver
+
+# List of necessary collections.
+ansible_collection:
+...
