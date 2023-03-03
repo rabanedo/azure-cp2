@@ -3,12 +3,12 @@
 
 # Packages necessary to install.
 packages:
-  - podman
-  - skopeo
   - httpd-tools
   - openssl
+  - podman
   - python3-passlib
   - python3-pyOpenSSL
+  - skopeo
 
 # Username webservice access.
 username: rabanedo
@@ -17,4 +17,11 @@ password: 1qaz2wsx
 
 # The algorithm used to generate the TLS/SSL private key.
 key_type: RSA
+
+# URL for ACR.
+acr_url: rracontainerregistry.azurecr.io
+# Username for ACR.
+acr_username: rraContainerRegistry
+# Password for ACR.
+acr_password: "LVx+n8ZRj8Xp0JKd3hGEOTJpkXg6Mv+LeUb3m/EkmQ+ACRChtjTY"
 ...

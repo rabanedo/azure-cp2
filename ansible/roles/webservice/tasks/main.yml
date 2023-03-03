@@ -97,22 +97,22 @@
   register: wsimage
 
 # https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_image_module.html
-- name: Pull an image webserver/httpd
+- name: Build and push an image webserver/httpd using username and password
   containers.podman.podman_image:
-    name: "localhost/webserver:{{ tag_image }}"
-
-# https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_tag_module.html
-#- containers.podman.podman_tag:
-#    image: localhost/webserver
-#    target_names:
-#      - "{{ tag_image }}"
-#  when: wsimage is defined
+    name: "{{ acr_url }}/webserver:{{ tag_image }}"
+    path: "{{ webserver_path }}"
+    push: yes
+    username: "{{ acr_username }}"
+    password: "{{ acr_password }}"
+    push_args:
+      dest: "{{ acr_url }}"
+  when: wsimage is defined
 
 # https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_container_module.html
 - name: Create a webserver/httpd container with systemd service file generated
   containers.podman.podman_container:
     name: web
-    image: "localhost/webserver:{{ tag_image }}"
+    image: "{{ acr_url }}/webserver:{{ tag_image }}"
     state: started
     recreate: yes
     expose:
@@ -131,5 +131,5 @@
   ansible.builtin.file:
     path: "{{ webservertemp.path }}"
     state: absent
-  when: webservertemp1.path is defined
+  when: webservertemp.path is defined
 ...

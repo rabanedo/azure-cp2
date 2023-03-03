@@ -9,7 +9,7 @@ variable "resource_group_name" {
 # INFO: https://github.com/claranet/terraform-azurerm-regions/blob/master/REGIONS.md
 # Declaramos la región de la infraestructura de azure
 variable "location_name" {
-  description = "Región de Azure donde se despliega la infraestructura"
+  description = "Azure region where the infrastructure is deployed"
   type        = string
   default     = "westeurope"
 }
@@ -23,21 +23,51 @@ variable "location_name" {
 # +----------------+-----+---------+-------+-------------+
 # | Standard_D2_v3 |  2  |    8	   | 50GB  | 2/moderado  |
 # +----------------+-----+---------+-------+-------------+
-variable "master_vm" {
+variable "cluster_aks" {
   type        = string
-  description = "VM Master [AKS]"
+  description = "Cluster AKS"
   default     = "Standard_D2_v3"
 }
 
-# Declaramos la vm worker/webservice y establecemos sus características (Standard_A2_v2)
+variable "dns_prefix" {
+  type        = string
+  description = "DNS prefix specified when creating the managed cluster"
+  default     = "aks-rra-cp2"
+}
+
+variable "aks_node_pool" {
+  type        = string
+  description = "The name which should be used for the default Kubernetes Node Pool"
+  default     = "nodepool"
+}
+
+variable "aks_network_plugin" {
+  type        = string
+  description = "Network plugin to use for networking"
+  default     = "kubenet"
+}
+
+variable "aks_lb_sku" {
+  type        = string
+  description = "Specifies the SKU of the Load Balancer used for this Kubernetes Cluster"
+  default     = "standard"
+}
+
+variable "aks_identity" {
+  type        = string
+  description = "Specifies the type of Managed Service Identity that should be configured on this Kubernetes Cluster"
+  default     = "SystemAssigned"
+}
+
+# Declaramos la vm webservice y establecemos sus características (Standard_A2_v2)
 # +----------------+-----+---------+-------+-------------+
 # |      Size      | CPU | Memoria |  SSD  |  Bandwidth  |
 # +----------------+-----+---------+-------+-------------+
 # | Standard_A2_v2 |  2  |    4	   | 20GB  | 2/moderado  |
 # +----------------+-----+---------+-------+-------------+
-variable "standard_vm" {
+variable "webservice_vm" {
   type        = string
-  description = "VM Standard [Worker/Webservice]"
+  description = "VM Webservice"
   default     = "Standard_A2_v2"
 }
 
@@ -67,19 +97,26 @@ variable "os_image_specs" {
   }
 }
 
+# Declaramos el SKU del container registry ACR
+variable "acr_sku" {
+  type        = string
+  description = "The SKU value of the container registry"
+  default     = "Basic"
+}
+
 #################################################### CONNECTION VARS ###################################################
 
 # Declaramos el usuario ssh para conectarse
 variable "ssh_user" {
   type        = string
-  description = "Usuario de conexión ssh"
+  description = "SSH connection user"
   default     = "azureuser"
 }
 
 # Declaramos el fichero con la clave pública a copiar a nuestras VMs
 variable "public_key_path" {
   type        = string
-  description = "Path de la clave pública de acceso a las instancias"
+  description = "Public key path to access the instances"
   default     = "~/.ssh/id_rsa.pub"
 }
 
@@ -95,50 +132,35 @@ variable "subnet_name" {
   default = "subnet"
 }
 
-# Declaramos la IP pública de la VM master
-variable "master_pip_name" {
-  default = "master_pip"
-}
-
-# Declaramos la interfaz de red de la VM master
-variable "master_vnic_name" {
-  default = "master_vnic"
-}
-
-# Declaramos la IP pública de la VM worker
-variable "worker_pip_name" {
-  default = "worker_pip"
-}
-
-# Declaramos la interfaz de red de la VM worker
-variable "worker_vnic_name" {
-  default = "worker_vnic"
-}
-
 # Declaramos la IP pública de la VM webservice
 variable "webservice_pip_name" {
-  default = "webservice_pip"
+  default = "webservice-pip"
 }
 
 # Declaramos la interfaz de red de la VM webservice
 variable "webservice_vnic_name" {
-  default = "webservice_vnic"
+  default = "webservice-vnic"
 }
 
 #################################################### SECURITY VARS #####################################################
 
-# Declaramos la security_rule_conf para la  SSH/IngressController
-variable "security_rule_conf" {
+# Declaramos la security_rule_conf para ssh/http
+variable "webservice_security_rule_conf" {
   default = {
     "SSH Security Rule" = {
-      name                       = "SSH"
-      priority                   = 1001
-      destination_port_range     = "22"
+      name                   = "ssh"
+      priority               = 1002
+      destination_port_range = "22"
     },
     "IngressController Security Rule" = {
-      name                       = "IngressController"
-      priority                   = 1002
-      destination_port_range     = "3000-32767"
+      name                   = "http"
+      priority               = 1003
+      destination_port_range = "8080"
     }
   }
+}
+
+# Declaramos el role_definition_name
+variable "role_definition" {
+  default     = "AcrPull"
 }

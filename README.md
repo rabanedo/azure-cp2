@@ -1,4 +1,4 @@
-# azure-cp2
+# Azure CP2
 El caso práctico 2 se enfoca en despliegues de aplicaciones sobre un proveedor de Cloud mediante el uso de herramientas DevOps.
 
 ## Objetivos del Caso Práctico 2
@@ -55,4 +55,9 @@ variable "location" {
   description = "Región de Azure donde crearemos la infraestructura"
   default = "<YOUR REGION>" 
 }
+```
+
+## License
+
+Licensed under the Apache License, Version 2.0. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 

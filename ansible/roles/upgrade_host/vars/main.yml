@@ -3,6 +3,7 @@
 
 # List of necessary collections.
 ansible_collection:
+  - epel-release
   - ansible-collection-community-general
   - ansible-collection-containers-podman
 ...

@@ -5,4 +5,4 @@ master-vm ansible_host=20.117.80.43 nombre_dominio=master-vm internal_ip=10.0.40
 [workers]
 worker-vm ansible_host=20.117.80.89 nombre_dominio=worker-vm internal_ip=10.0.40.14 ansible_user=azureuser
 [webservice]
-webservice-vm ansible_host=20.117.80.23 nombre_dominio=webservice-vm internal_ip=10.0.40.18 ansible_user=azureuser
+webservice ansible_host=20.117.80.23 nombre_dominio=webservice-vm internal_ip=10.0.40.18 ansible_user=azureuser

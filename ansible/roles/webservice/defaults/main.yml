@@ -33,4 +33,10 @@ tag_image: casopractico2
 container_web_service: /etc/systemd/system/
 # Container systemd service name.
 container_prefix: container
+# URL for ACR.
+acr_url: containerregistry.azurecr.io
+# Username for ACR.
+acr_username: azurecr
+# Password for ACR.
+acr_password: azurecr
 ...

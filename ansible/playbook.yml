@@ -5,7 +5,7 @@
   gather_facts: true
   become: true
   roles:
-    - sis_upgrade_host
+    - upgrade_host
   tags:
     - always
 
