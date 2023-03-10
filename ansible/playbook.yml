@@ -18,4 +18,26 @@
     - webservice
   tags:
     - webservice
+
+# Install PostgreSQL
+- name: Install PostgreSQL
+  hosts: webservice
+  gather_facts: true
+  become: true
+  roles:
+    - postgresql
+  tags:
+    - postgresql
+    - k8s
+
+# Install AKS (k8s SonarQube)
+- name: Install AKS [k8s SonarQube]
+  hosts: aks
+  gather_facts: true
+  become: true
+  roles:
+    - sonarqube
+  tags:
+    - sonarqube
+    - k8s
 ...

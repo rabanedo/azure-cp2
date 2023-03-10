@@ -5,34 +5,43 @@
 username: test
 # Default password.
 password: test
-# Path in which webserver.
+
+# Path in which webserver deploy.
 webserver_path: /opt/webserver
+
 # Server container path.
 server_container_path: /usr/local/apache2
+
 # File in which the generated TLS/SSL private key.
 server_hostname: webservice-unir-practica2
+
 # Size (in bits) of the TLS/SSL key to generate.
 key_size: 2048
 # The passphrase for the private key.
 passphrase:
 # Default algorithm used to generate the TLS/SSL private key.
 key_type: DSA
+
 # Configuration container files.
 container_files:
   - { src_path: 'files', file_name: 'index.html' }
+
 # Configuration container templates.
 container_templates:
   - { src_path: 'templates', file_name: '.htaccess' }
   - { src_path: 'templates', file_name: 'httpd.conf' }
   - { src_path: 'templates', file_name: 'Containerfile' }
+
 # Name for container image.
 podman_image: docker.io/httpd:latest
 # Tag for container image.
 tag_image: casopractico2
+
 # Path for container systemd service.
 container_web_service: /etc/systemd/system/
 # Container systemd service name.
 container_prefix: container
+
 # URL for ACR.
 acr_url: containerregistry.azurecr.io
 # Username for ACR.

@@ -1,0 +1,10 @@
+---
+# vars file for PostgreSQL
+
+# PostgreSQL username for SonarQube.
+db_user: rrabanedo
+# PostgreSQL password for SonarQube.
+db_password: 1nd3sc1fr4bl3@cp2
+# PostgreSQL database name for SonarQube.
+db_name: sonarqube
+...

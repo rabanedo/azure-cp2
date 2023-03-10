@@ -61,7 +61,7 @@
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html
-- name: Copy container files in webserver temporary directory
+- name: Copy container templates in webserver temporary directory
   ansible.builtin.template:
     src: "{{ item.src_path }}/{{ item.file_name }}.j2"
     dest: "{{ webserver_path }}/{{ item.file_name }}"

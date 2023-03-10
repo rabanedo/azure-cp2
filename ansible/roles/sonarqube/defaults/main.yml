@@ -1,0 +1,6 @@
+---
+# defaults file for SonarQube
+
+# Path in which k8s deploy.
+k8s_path: "/opt/sonar"
+...

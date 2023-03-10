@@ -1,0 +1,16 @@
+---
+# defaults file for PostgreSQL
+
+# List of necessary postgres packages.
+postgres_packages:
+  - postgresql
+  - postgresql-server
+  - python3-psycopg2
+
+# Default username.
+db_user: usermock
+# Default password.
+db_password: passwordmock
+# Default database.
+db_name: dbmock
+...

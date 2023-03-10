@@ -1,0 +1,66 @@
+---
+# vars file for SonarQube
+
+# Packages necessary to install.
+pip_packages:
+  - pyyaml
+  - kubernetes
+  - openshift
+
+# Template name k8s *.yaml.
+k8s_templates:
+  - sonar-data.yml
+  - sonar-extensions.yml
+  - sonar-secret.yml
+  - sonar-deployment.yml
+  - sonar-service.yml
+
+# k8s namespace.
+k8s_namespace: "sonarqube"
+
+# k8s Deployment yaml vars.
+deployment:
+  name: sonarqube
+  image: sonarqube
+  replicas: 1
+  terminationGracePeriodSeconds: 30
+  containers:
+    resources:
+      cpu: 500m
+      memory: 1024Mi
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+    ports:
+      containerPort: 9000
+      name: sonarqube
+    env:
+      username: rrabanedo
+      url: jdbc:postgresql:tcp://127.0.0.1:5432/sonarqube
+  initContainers:
+    name: fix-the-volume-permission
+    image: busybox
+    volumeMounts:
+      name: sonar
+      mountPath: /opt/sonarqube
+
+# k8s Service yaml vars.
+svc:
+  name: sonarqube
+  ports:
+    name: sonar
+    port: 1080
+    protocol: TCP
+    targetPort: 9000
+  type: LoadBalancer
+
+# k8s PersistentVolumeClaim yaml vars.
+pvc:
+  name: sonar
+  accessModes: ReadWriteOnce
+  storageClassName: standard
+  storage: 5Gi
+
+# k8s Secrets yaml info.
+# Encrypted in Base64: echo -n '1nd3sc1fr4bl3@cp2' | base64
+...
