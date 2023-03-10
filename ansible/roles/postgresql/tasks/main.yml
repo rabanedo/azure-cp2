@@ -1,0 +1,81 @@
+---
+# PostgreSQL ansible community
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/ansible_galaxy_install_module.html
+- name: Install ansible community.postgresql
+  community.general.ansible_galaxy_install:
+    type: collection
+    name: community.postgresql
+    force: true
+
+# PostgreSQL installation
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
+- name: Install PostgreSQL packages
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ postgres_packages }}"
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html
+- name: Find out if PostgreSQL is initialized
+  ansible.builtin.stat:
+    path: "/var/lib/pgsql/data/pg_hba.conf"
+  register: postgres_data
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html
+- name: Initialize PostgreSQL
+  ansible.builtin.shell: "postgresql-setup initdb"
+  when: not postgres_data.stat.exists
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
+- name: Enable PostgreSQL service and ensure it make sure a service is running
+  ansible.builtin.systemd:
+    name: postgresql
+    state: started
+    enabled: true
+
+# Creating the database and the database user
+
+# https://docs.ansible.com/ansible/latest/collections/community/postgresql/postgresql_db_module.html
+- name: Create SonarQube postgres database
+  community.postgresql.postgresql_db:
+    name: "{{ db_name }}"
+    state: present
+  become: yes
+  become_user: postgres
+
+# https://docs.ansible.com/ansible/latest/collections/community/postgresql/postgresql_user_module.html
+- name: Connect to database, create user and set user's password with no expire date
+  community.postgresql.postgresql_user:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    expires: infinity
+  become: yes
+  become_user: postgres
+
+# https://docs.ansible.com/ansible/latest/collections/community/postgresql/postgresql_privs_module.html
+- name: Grant privs to user access on database
+  community.postgresql.postgresql_privs:
+    db: "{{ db_name }}"
+    privs: ALL
+    type: database
+    role: "{{ db_user }}"
+  become: yes
+  become_user: postgres
+
+# https://docs.ansible.com/ansible/latest/collections/community/postgresql/postgresql_pg_hba_module.html
+- name: Grant users access to databases from localhost using password authentication
+  community.postgresql.postgresql_pg_hba:
+    dest: "~/data/pg_hba.conf"
+    contype: host
+    users: "{{ db_user }}"
+    databases: "{{ db_name }}"
+    method: password
+    create: true
+  become: yes
+  become_user: postgres
+  notify:
+    - Restart PostgreSQL
+...
