@@ -1,21 +1,10 @@
 ---
-# PostgreSQL ansible community
-
-# https://docs.ansible.com/ansible/latest/collections/community/general/ansible_galaxy_install_module.html
-- name: Install ansible community.postgresql
-  community.general.ansible_galaxy_install:
-    type: collection
-    name: community.postgresql
-    force: true
-
 # PostgreSQL installation
-
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
 - name: Install PostgreSQL packages
   ansible.builtin.dnf:
-    name: "{{ item }}"
+    name: "{{ postgres_packages }}"
     state: latest
-  loop: "{{ postgres_packages }}"
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html
 - name: Find out if PostgreSQL is initialized
@@ -36,7 +25,6 @@
     enabled: true
 
 # Creating the database and the database user
-
 # https://docs.ansible.com/ansible/latest/collections/community/postgresql/postgresql_db_module.html
 - name: Create SonarQube postgres database
   community.postgresql.postgresql_db:

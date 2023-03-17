@@ -3,4 +3,11 @@
 
 # Path in which k8s deploy.
 k8s_path: "/opt/sonar"
+
+# Path kube config.
+kube_config_path: "~/.kube/config"
+
+# Temporary path for kube config.
+kube_config_temp: "/tmp/config"
+
 ...

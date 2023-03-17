@@ -5,25 +5,36 @@
 The playbook has the following structure:
 
 - playbook.yml
+- playbook_ws_aks.yml
 
 - environments
     - development:                     Development environment.
     - production:                      Production environment.
 
-- global_vars
-
 - roles
-    - upgrade_host:                    Upgrade SO & packages.
     - webservice:                      Deploy a basic webservice with a podman http container.
+    - postgresql:                      Deploy a postgresql database for SonarQube.
+    - sonarqube:                       Deploy SonarQube in a Azure AKS.
 
 ## Global vars
 
+- global_vars
+    - tf_ansible_vars.yml:             Outputs vars from Terraform.
+        - tf_webservice_pip:           Public webservice IP.
+        - tf_acr_password:             Azure container registry (ACR) pasword.
+
 ## Vars
 
-- roles/upgrade_host/vars
+- roles/postgresql/defaults
+    - postgres_packages:               List of necessary postgres packages.
+    - db_user:                         Default username.
+    - db_password:                     Default password.
+    - db_name:                         Default database.
+
+- roles/postgresql/handlers
     - ansible_collection:              List of necessary collections.
 
-- roles/upgrade_host/vars
+- roles/postgresql/vars
     - ansible_collection:              List of necessary collections.
 
 - roles/webservice/defaults
@@ -48,9 +59,11 @@ The playbook has the following structure:
     - acr_url:                         URL for ACR.
     - acr_username:                    Username for ACR.
     - acr_password:                    Password for ACR.
+    - sq_path:                         Path in which SonarQube image.
+    - sonarqube_image:                 SonarQube image for AKS.
 
-- roles/webservice/defaults
-    - packages:                        Packages necessary to install.
+- roles/webservice/vars
+    - ws_packages:                     Packages necessary to install.
     - username:                        Username webservice access.
     - password:                        Password webservice access.
     - key_type:                        The algorithm used to generate the TLS/SSL private key.
@@ -59,3 +72,5 @@ The playbook has the following structure:
     - acr_password:                    Password for ACR.
 
 ## Encrypted files
+
+There isn't

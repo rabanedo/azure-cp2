@@ -1,17 +1,11 @@
 ---
-# Upgrade SO
-- name: Upgrade SO
-  hosts: all
-  gather_facts: true
-  become: true
-  roles:
-    - upgrade_host
-  tags:
-    - always
+# Playbook for install the Webserver, SonarQube in Azure AKS and PostgreSQL like database.
 
 # Install WS
 - name: Install WS
   hosts: webservice
+  vars_files:
+    - global_vars/tf_ansible_vars.yml
   gather_facts: true
   become: true
   roles:
@@ -22,6 +16,8 @@
 # Install PostgreSQL
 - name: Install PostgreSQL
   hosts: webservice
+  vars_files:
+    - global_vars/tf_ansible_vars.yml
   gather_facts: true
   become: true
   roles:
@@ -32,9 +28,10 @@
 
 # Install AKS (k8s SonarQube)
 - name: Install AKS [k8s SonarQube]
-  hosts: aks
+  hosts: 127.0.0.1
+  vars_files:
+    - global_vars/tf_ansible_vars.yml
   gather_facts: true
-  become: true
   roles:
     - sonarqube
   tags:

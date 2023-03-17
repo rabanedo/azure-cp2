@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('SetUp'){
+            steps{
+                echo 'TERRAFORM: Create infraestructure in Azure'
+                sh "bash terraform/deploy.sh"
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Clean env: delete dir'
+            cleanWs()
+        }
+    }
+}

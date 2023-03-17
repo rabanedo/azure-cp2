@@ -9,9 +9,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = var.dns_prefix
 
   default_node_pool {
-    name       = var.aks_node_pool
-    node_count = 1
-    vm_size    = var.cluster_aks
+    name                = var.aks_node_pool
+    node_count          = 1
+    vm_size             = var.cluster_aks
+    type                = "VirtualMachineScaleSets"
+    enable_auto_scaling = false
   }
 
   linux_profile {
@@ -75,4 +77,21 @@ resource "azurerm_container_registry" "acr" {
   location            = azurerm_resource_group.rg.location
   sku                 = var.acr_sku
   admin_enabled       = true
+}
+
+# INFO: https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file
+# Exportar variables de terraform necesarias para ansible
+resource "local_file" "tf_ansible_vars" {
+  content  = <<-DOC
+    tf_acr_password: ${azurerm_container_registry.acr.admin_password}
+    tf_webservice_pip: ${azurerm_linux_virtual_machine.webservice.public_ip_address}
+    DOC
+  filename = var.ansible_vars_filename
+}
+
+resource "local_file" "tf_ansible_kube_config" {
+  content  = <<-DOC
+    ${azurerm_kubernetes_cluster.aks.kube_config_raw}
+    DOC
+  filename = var.tf_ansible_kube_config_filename
 }

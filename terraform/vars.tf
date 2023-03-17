@@ -164,3 +164,17 @@ variable "webservice_security_rule_conf" {
 variable "role_definition" {
   default     = "AcrPull"
 }
+
+################################################### LOCALFILES VARS ####################################################
+
+# Declaramos la ruta del fichero de variables para ansible
+variable "ansible_vars_filename" {
+  type = string
+  default = "../ansible/global_vars/tf_ansible_vars.yml"
+}
+
+# Declaramos la ruta del fichero kube_config
+variable "tf_ansible_kube_config_filename" {
+  type = string
+  default = "/tmp/config"
+}

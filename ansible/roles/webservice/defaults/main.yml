@@ -48,4 +48,10 @@ acr_url: containerregistry.azurecr.io
 acr_username: azurecr
 # Password for ACR.
 acr_password: azurecr
+
+# Path in which SonarQube image.
+sq_path: /tmp/sonarqube
+
+# SonarQube image for AKS.
+sonarqube_image: docker.io/library/sonarqube
 ...

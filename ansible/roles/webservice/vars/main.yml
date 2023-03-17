@@ -2,13 +2,13 @@
 # vars file for webserver
 
 # Packages necessary to install.
-packages:
+ws_packages:
   - httpd-tools
   - openssl
   - podman
+  - skopeo
   - python3-passlib
   - python3-pyOpenSSL
-  - skopeo
 
 # Username webservice access.
 username: rabanedo
@@ -23,5 +23,5 @@ acr_url: rracontainerregistry.azurecr.io
 # Username for ACR.
 acr_username: rraContainerRegistry
 # Password for ACR.
-acr_password: "LVx+n8ZRj8Xp0JKd3hGEOTJpkXg6Mv+LeUb3m/EkmQ+ACRChtjTY"
+acr_password: "{{ tf_acr_password }}"
 ...

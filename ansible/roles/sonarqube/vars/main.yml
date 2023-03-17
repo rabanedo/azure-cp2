@@ -2,6 +2,11 @@
 # vars file for SonarQube
 
 # Packages necessary to install.
+apt_packages:
+  - python3-pip
+  - podman
+
+# Packages necessary to install.
 pip_packages:
   - pyyaml
   - kubernetes
@@ -15,28 +20,35 @@ k8s_templates:
   - sonar-deployment.yml
   - sonar-service.yml
 
+# URL for ACR.
+acr_url: rracontainerregistry.azurecr.io
+
+# Tag for container image.
+tag_image: casopractico2
+
 # k8s namespace.
 k8s_namespace: "sonarqube"
 
 # k8s Deployment yaml vars.
 deployment:
   name: sonarqube
-  image: sonarqube
+  image: {{ acr_url }}/sonarqube:{{ tag_image }}
   replicas: 1
-  terminationGracePeriodSeconds: 30
+  terminationGracePeriodSeconds: 15
   containers:
     resources:
-      cpu: 500m
-      memory: 1024Mi
+      cpu: 2200m
+      memory: 4096Mi
     limits:
-      cpu: 2000m
-      memory: 2048Mi
+      cpu: 2800m
+      memory: 6144Mi
     ports:
       containerPort: 9000
       name: sonarqube
     env:
       username: rrabanedo
-      url: jdbc:postgresql:tcp://127.0.0.1:5432/sonarqube
+      url: jdbc:h2:tcp://127.0.0.1:9092/sonar
+      #url: jdbc:postgresql:tcp://{{ tf_webservice_pip }}:5432/sonarqube
   initContainers:
     name: fix-the-volume-permission
     image: busybox
@@ -58,7 +70,7 @@ svc:
 pvc:
   name: sonar
   accessModes: ReadWriteOnce
-  storageClassName: standard
+  storageClassName: default
   storage: 5Gi
 
 # k8s Secrets yaml info.

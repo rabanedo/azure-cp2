@@ -1,15 +1,30 @@
 ---
-# https://docs.ansible.com/ansible/latest/collections/community/general/ansible_galaxy_install_module.html
-- name: Install ansible community.kubernetes
-  community.general.ansible_galaxy_install:
-    type: collection
-    name: community.kubernetes
-    force: true
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+- name: Install python3-pip
+  ansible.builtin.apt:
+    name: python3-pip
+    state: latest
 
-  # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pip_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pip_module.html
 - name: Install python pre-requisites packages
   ansible.builtin.pip:
     name: "{{ pip_packages }}"
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/tempfile_module.html
+- name: Create kube directory for k8s' configuration file
+  ansible.builtin.file:
+    path: "{{ kube_config_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+- name: Copy config file in kube directory
+  ansible.builtin.copy:
+    src: "{{ kube_config_temp }}"
+    dest: "{{ kube_config_path }}"
+    mode: 0644
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/tempfile_module.html
 - name: Create k8s temporary directory
@@ -19,14 +34,13 @@
   register: k8stemp
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
-# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html
 - name: Define PersistentVolumeClaim, secrets, deployment and services objects
   template:
     src: "templates/{{ item }}.j2"
     dest: "{{ k8s_path }}/{{ item }}"
     owner: root
     group: root
-    mode: 0664
+    mode: 0644
   loop: "{{ k8s_templates }}"
 
 # https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html
@@ -34,14 +48,14 @@
   kubernetes.core.k8s:
     kind: Namespace
     name: "{{ k8s_namespace }}"
-    kubeconfig: '~/.kube/config'
+    kubeconfig: "{{ kube_config_temp }}"
 
 # https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html
 - name: Create a Deployment by reading the definition from a template
   kubernetes.core.k8s:
     state: present
     src: "{{ k8s_path }}/{{ item }}"
-    kubeconfig: '~/.kube/config'
+    kubeconfig: "{{ kube_config_temp }}"
   loop: "{{ k8s_templates }}"
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
@@ -49,5 +63,5 @@
   ansible.builtin.file:
     path: "{{ k8stemp.path }}"
     state: absent
-  when: k8s_fallar.path is defined
+  when: k8stemp.path is defined
 ...

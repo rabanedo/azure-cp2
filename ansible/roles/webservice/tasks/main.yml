@@ -1,8 +1,26 @@
 ---
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
+- name: Autoremove unneeded packages installed as dependencies
+  ansible.builtin.dnf:
+    autoremove: yes
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
+- name: Install epel-release packages
+  ansible.builtin.dnf:
+    name: epel-release
+    state: latest
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
 - name: Install the latest version of podman, skopeo, httpd-tools and openssl
   ansible.builtin.dnf:
-    name: "{{ packages }}"
+    name: "{{ ws_packages }}"
     state: latest
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/tempfile_module.html
@@ -20,7 +38,7 @@
     password: "{{ password }}"
     owner: root
     group: root
-    mode: 0664
+    mode: 0644
 
 # https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_privatekey_module.html
 - name: Generate an OpenSSL private RSA key
@@ -44,7 +62,7 @@
     organization_name: "DevOps"
     organizational_unit_name: "DevOps Unir"
     common_name: "{{ server_hostname }}"
-    mode: 0664
+    mode: 0644
   register: csr
   when: privatekey is defined
 
@@ -56,7 +74,7 @@
     csr_path: "{{ webserver_path }}/{{ server_hostname }}.csr"
     provider: selfsigned
     selfsigned_not_after: "+365d"
-    mode: 0664
+    mode: 0644
   when: csr is defined
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
@@ -67,7 +85,7 @@
     dest: "{{ webserver_path }}/{{ item.file_name }}"
     owner: root
     group: root
-    mode: 0664
+    mode: 0644
   loop: "{{ container_templates }}"
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
@@ -77,7 +95,7 @@
     dest: "{{ webserver_path }}/{{ item.file_name }}"
     owner: root
     group: root
-    mode: 0664
+    mode: 0644
   loop: "{{ container_files }}"
 
 # https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_image_module.html
@@ -132,4 +150,43 @@
     path: "{{ webservertemp.path }}"
     state: absent
   when: webservertemp.path is defined
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/tempfile_module.html
+- name: Create SonarQube temporary directory
+  ansible.builtin.file:
+    path: "{{ sq_path }}"
+    state: directory
+  register: sqtemp
+
+# https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_image_module.html
+- name: Pull a SonarQube image for AKS
+  containers.podman.podman_image:
+    name: "{{ sonarqube_image }}"
+  register: sqimage
+
+# https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_tag_module.html
+- name: Label the image
+  containers.podman.podman_tag:
+    image: "{{ sonarqube_image }}"
+    target_names:
+      - "sonarqube:{{ tag_image }}"
+
+# https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_image_module.html
+- name: Push a SonarQube image using existing credentials
+  containers.podman.podman_image:
+    name: "sonarqube:{{ tag_image }}"
+    push: yes
+    username: "{{ acr_username }}"
+    password: "{{ acr_password }}"
+    push_args:
+      dest: "{{ acr_url }}"
+  when: sqimage is defined
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+- name: Remove the SonarQube temporary directory
+  ansible.builtin.file:
+    path: "{{ sqtemp.path }}"
+    state: absent
+
+  when: sqtemp.path is defined
 ...
