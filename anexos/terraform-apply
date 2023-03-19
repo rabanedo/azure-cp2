@@ -435,3 +435,4 @@ kube_config = <sensitive>
 resource_group_id = "/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources"
 webservice_id = "/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Compute/virtualMachines/webservice"
 webservice_pip = "20.224.234.29"
+

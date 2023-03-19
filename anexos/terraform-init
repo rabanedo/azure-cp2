@@ -33,5 +33,3 @@ rabanedo@jenkins-api:~/azure/terraform$ terraform validate
 
 Success! The configuration is valid.
 
-
-
