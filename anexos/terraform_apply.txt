@@ -1,0 +1,437 @@
+rabanedo@jenkins-api:~/azure/terraform$ terraform apply --auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+
+  + create
+
+Terraform will perform the following actions:
+
+  # azurerm_container_registry.acr will be created
+  + resource "azurerm_container_registry" "acr" {
+      + admin_enabled                 = true
+      + admin_password                = (sensitive value)
+      + admin_username                = (known after apply)
+      + encryption                    = (known after apply)
+      + export_policy_enabled         = true
+      + id                            = (known after apply)
+      + location                      = "westeurope"
+      + login_server                  = (known after apply)
+      + name                          = "rraContainerRegistry"
+      + network_rule_bypass_option    = "AzureServices"
+      + network_rule_set              = (known after apply)
+      + public_network_access_enabled = true
+      + resource_group_name           = "rg-resources"
+      + retention_policy              = (known after apply)
+      + sku                           = "Basic"
+      + trust_policy                  = (known after apply)
+      + zone_redundancy_enabled       = false
+    }
+
+  # azurerm_kubernetes_cluster.aks will be created
+  + resource "azurerm_kubernetes_cluster" "aks" {
+      + api_server_authorized_ip_ranges     = (known after apply)
+      + dns_prefix                          = "aks-rra-cp2"
+      + fqdn                                = (known after apply)
+      + http_application_routing_zone_name  = (known after apply)
+      + id                                  = (known after apply)
+      + image_cleaner_enabled               = false
+      + image_cleaner_interval_hours        = 48
+      + kube_admin_config                   = (sensitive value)
+      + kube_admin_config_raw               = (sensitive value)
+      + kube_config                         = (sensitive value)
+      + kube_config_raw                     = (sensitive value)
+      + kubernetes_version                  = (known after apply)
+      + location                            = "westeurope"
+      + name                                = "aks"
+      + node_resource_group                 = (known after apply)
+      + oidc_issuer_url                     = (known after apply)
+      + portal_fqdn                         = (known after apply)
+      + private_cluster_enabled             = false
+      + private_cluster_public_fqdn_enabled = false
+      + private_dns_zone_id                 = (known after apply)
+      + private_fqdn                        = (known after apply)
+      + public_network_access_enabled       = true
+      + resource_group_name                 = "rg-resources"
+      + role_based_access_control_enabled   = true
+      + run_command_enabled                 = true
+      + sku_tier                            = "Free"
+      + workload_identity_enabled           = false
+
+      + default_node_pool {
+          + enable_auto_scaling  = false
+          + kubelet_disk_type    = (known after apply)
+          + max_pods             = (known after apply)
+          + name                 = "nodepool"
+          + node_count           = 1
+          + node_labels          = (known after apply)
+          + orchestrator_version = (known after apply)
+          + os_disk_size_gb      = (known after apply)
+          + os_disk_type         = "Managed"
+          + os_sku               = (known after apply)
+          + scale_down_mode      = "Delete"
+          + type                 = "VirtualMachineScaleSets"
+          + ultra_ssd_enabled    = false
+          + vm_size              = "Standard_D2_v3"
+          + workload_runtime     = (known after apply)
+        }
+
+      + identity {
+          + principal_id = (known after apply)
+          + tenant_id    = (known after apply)
+          + type         = "SystemAssigned"
+        }
+
+      + linux_profile {
+          + admin_username = "azureuser"
+          + ssh_key {
+              + key_data = <<-EOT
+                    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCIsfA4109X61a/9SujhVRhcNRLdOpSJQiZYGuf0xiPPZixu8QPWxZ0duI86qhbazIwky2EAz/JiPQfyie/THHlBKqbzy1RL8jVcJJ8+ySfasDd06yNcEg5buxDA6izAL7d00HzoLHTziNbyFr8YCOz9mIU5zg4519qiUhWY0QLNDGJ1ZeKb/Z5Lo5ObPDJFjy3R7gKmTQsw79Y6W8n92f4M+jK0WzG4bAWd2BjxERyWrR7ObL2tcLbaPLHhurqO1Gp6VSTNAnn1mef74XPEszXdv57pAPvZcfJjymmcrxNAntSobrjU36iwMsq/RHQ4668Qd47JKxSr5ME7EOJxn4cRY14ai4xq7MZblV2j3jd7J+hFWrDsbqhCutDUSRc7BPT8pSbldYLx8qFyHJO84MpA5L5Xbrijx32uqiUds3oMQYcDETx0TWMUUHceML9pFPrkQ09r+7sgGG+psXCi4fsEKFLlKblqCOy000bz3b8mzROZKx6ZBmrg5MfsEJTqPUKP3OsHSx11yxePd2/vKGFoyCTXBc4+iwCVNfjn9xyvDpGMFrEttbTS2Q3kJOvjLkZZXvItVvIUxOx2zvVIyE9x6WprhbcudLWwvxHxpTiuh1cGpeXxjyA7CbLWAAYG2mgsjb5oXKdyGiBkPkr48kUEBpOEiNr/D4Kjm2OqX68Jw== rabanedo@jenkins-api
+                EOT
+            }
+        }
+
+      + network_profile {
+          + dns_service_ip     = (known after apply)
+          + docker_bridge_cidr = (known after apply)
+          + ip_versions        = (known after apply)
+          + load_balancer_sku  = "standard"
+          + network_mode       = (known after apply)
+          + network_plugin     = "kubenet"
+          + network_policy     = (known after apply)
+          + outbound_type      = "loadBalancer"
+          + pod_cidr           = (known after apply)
+          + pod_cidrs          = (known after apply)
+          + service_cidr       = (known after apply)
+          + service_cidrs      = (known after apply)
+        }
+    }
+
+  # azurerm_linux_virtual_machine.webservice will be created
+  + resource "azurerm_linux_virtual_machine" "webservice" {
+      + admin_username                  = "azureuser"
+      + allow_extension_operations      = true
+      + computer_name                   = (known after apply)
+      + disable_password_authentication = true
+      + extensions_time_budget          = "PT1H30M"
+      + id                              = (known after apply)
+      + location                        = "westeurope"
+      + max_bid_price                   = -1
+      + name                            = "webservice"
+      + network_interface_ids           = (known after apply)
+      + patch_assessment_mode           = "ImageDefault"
+      + patch_mode                      = "ImageDefault"
+      + platform_fault_domain           = -1
+      + priority                        = "Regular"
+      + private_ip_address              = (known after apply)
+      + private_ip_addresses            = (known after apply)
+      + provision_vm_agent              = true
+      + public_ip_address               = (known after apply)
+      + public_ip_addresses             = (known after apply)
+      + resource_group_name             = "rg-resources"
+      + size                            = "Standard_A2_v2"
+      + virtual_machine_id              = (known after apply)
+
+      + admin_ssh_key {
+          + public_key = <<-EOT
+                ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCIsfA4109X61a/9SujhVRhcNRLdOpSJQiZYGuf0xiPPZixu8QPWxZ0duI86qhbazIwky2EAz/JiPQfyie/THHlBKqbzy1RL8jVcJJ8+ySfasDd06yNcEg5buxDA6izAL7d00HzoLHTziNbyFr8YCOz9mIU5zg4519qiUhWY0QLNDGJ1ZeKb/Z5Lo5ObPDJFjy3R7gKmTQsw79Y6W8n92f4M+jK0WzG4bAWd2BjxERyWrR7ObL2tcLbaPLHhurqO1Gp6VSTNAnn1mef74XPEszXdv57pAPvZcfJjymmcrxNAntSobrjU36iwMsq/RHQ4668Qd47JKxSr5ME7EOJxn4cRY14ai4xq7MZblV2j3jd7J+hFWrDsbqhCutDUSRc7BPT8pSbldYLx8qFyHJO84MpA5L5Xbrijx32uqiUds3oMQYcDETx0TWMUUHceML9pFPrkQ09r+7sgGG+psXCi4fsEKFLlKblqCOy000bz3b8mzROZKx6ZBmrg5MfsEJTqPUKP3OsHSx11yxePd2/vKGFoyCTXBc4+iwCVNfjn9xyvDpGMFrEttbTS2Q3kJOvjLkZZXvItVvIUxOx2zvVIyE9x6WprhbcudLWwvxHxpTiuh1cGpeXxjyA7CbLWAAYG2mgsjb5oXKdyGiBkPkr48kUEBpOEiNr/D4Kjm2OqX68Jw== rabanedo@jenkins-api
+            EOT
+          + username   = "azureuser"
+        }
+
+      + os_disk {
+          + caching                   = "ReadWrite"
+          + disk_size_gb              = (known after apply)
+          + name                      = (known after apply)
+          + storage_account_type      = "Standard_LRS"
+          + write_accelerator_enabled = false
+        }
+
+      + plan {
+          + name      = "8-gen1"
+          + product   = "almalinux"
+          + publisher = "almalinux"
+        }
+
+      + source_image_reference {
+          + offer     = "almalinux"
+          + publisher = "almalinux"
+          + sku       = "8-gen1"
+          + version   = "8.7.2022122801"
+        }
+    }
+
+  # azurerm_network_interface.webservice_vnic will be created
+  + resource "azurerm_network_interface" "webservice_vnic" {
+      + applied_dns_servers           = (known after apply)
+      + dns_servers                   = (known after apply)
+      + enable_accelerated_networking = false
+      + enable_ip_forwarding          = false
+      + id                            = (known after apply)
+      + internal_dns_name_label       = (known after apply)
+      + internal_domain_name_suffix   = (known after apply)
+      + location                      = "westeurope"
+      + mac_address                   = (known after apply)
+      + name                          = "webservice-vnic"
+      + private_ip_address            = (known after apply)
+      + private_ip_addresses          = (known after apply)
+      + resource_group_name           = "rg-resources"
+      + virtual_machine_id            = (known after apply)
+
+      + ip_configuration {
+          + gateway_load_balancer_frontend_ip_configuration_id = (known after apply)
+          + name                                               = "subnet"
+          + primary                                            = (known after apply)
+          + private_ip_address                                 = "10.0.40.18"
+          + private_ip_address_allocation                      = "Static"
+          + private_ip_address_version                         = "IPv4"
+          + public_ip_address_id                               = (known after apply)
+          + subnet_id                                          = (known after apply)
+        }
+    }
+
+  # azurerm_network_interface_security_group_association.webservice_nisga will be created
+  + resource "azurerm_network_interface_security_group_association" "webservice_nisga" {
+      + id                        = (known after apply)
+      + network_interface_id      = (known after apply)
+      + network_security_group_id = (known after apply)
+    }
+
+  # azurerm_network_security_group.webservice_nsg will be created
+  + resource "azurerm_network_security_group" "webservice_nsg" {
+      + id                  = (known after apply)
+      + location            = "westeurope"
+      + name                = "webservice-nsg"
+      + resource_group_name = "rg-resources"
+
+      + security_rule       = [
+          + {
+              + access                                     = "Allow"
+              + description                                = ""
+              + destination_address_prefix                 = "*"
+              + destination_address_prefixes               = []
+              + destination_application_security_group_ids = []
+              + destination_port_range                     = "22"
+              + destination_port_ranges                    = []
+              + direction                                  = "Inbound"
+              + name                                       = "ssh"
+              + priority                                   = 1002
+              + protocol                                   = "Tcp"
+              + source_address_prefix                      = "*"
+              + source_address_prefixes                    = []
+              + source_application_security_group_ids      = []
+              + source_port_range                          = "*"
+              + source_port_ranges                         = []
+            },
+          + {
+              + access                                     = "Allow"
+              + description                                = ""
+              + destination_address_prefix                 = "*"
+              + destination_address_prefixes               = []
+              + destination_application_security_group_ids = []
+              + destination_port_range                     = "8080"
+              + destination_port_ranges                    = []
+              + direction                                  = "Inbound"
+              + name                                       = "http"
+              + priority                                   = 1003
+              + protocol                                   = "Tcp"
+              + source_address_prefix                      = "*"
+              + source_address_prefixes                    = []
+              + source_application_security_group_ids      = []
+              + source_port_range                          = "*"
+              + source_port_ranges                         = []
+            },
+        ]
+    }
+
+  # azurerm_public_ip.webservice_pip will be created
+  + resource "azurerm_public_ip" "webservice_pip" {
+      + allocation_method       = "Dynamic"
+      + ddos_protection_mode    = "VirtualNetworkInherited"
+      + fqdn                    = (known after apply)
+      + id                      = (known after apply)
+      + idle_timeout_in_minutes = 4
+      + ip_address              = (known after apply)
+      + ip_version              = "IPv4"
+      + location                = "westeurope"
+      + name                    = "webservice-pip"
+      + resource_group_name     = "rg-resources"
+      + sku                     = "Basic"
+      + sku_tier                = "Regional"
+    }
+
+  # azurerm_resource_group.rg will be created
+  + resource "azurerm_resource_group" "rg" {
+      + id       = (known after apply)
+      + location = "westeurope"
+      + name     = "rg-resources"
+    }
+
+  # azurerm_role_assignment.ra will be created
+  + resource "azurerm_role_assignment" "ra" {
+      + id                               = (known after apply)
+      + name                             = (known after apply)
+      + principal_id                     = (known after apply)
+      + principal_type                   = (known after apply)
+      + role_definition_id               = (known after apply)
+      + role_definition_name             = "AcrPull"
+      + scope                            = (known after apply)
+      + skip_service_principal_aad_check = true
+    }
+
+  # azurerm_subnet.subnet will be created
+  + resource "azurerm_subnet" "subnet" {
+      + address_prefixes                               = [
+          + "10.0.40.0/27",
+        ]
+      + enforce_private_link_endpoint_network_policies = (known after apply)
+      + enforce_private_link_service_network_policies  = (known after apply)
+      + id                                             = (known after apply)
+      + name                                           = "subnet"
+      + private_endpoint_network_policies_enabled      = (known after apply)
+      + private_link_service_network_policies_enabled  = (known after apply)
+      + resource_group_name                            = "rg-resources"
+      + virtual_network_name                           = "vnet"
+    }
+
+  # azurerm_virtual_network.vnet will be created
+  + resource "azurerm_virtual_network" "vnet" {
+      + address_space       = [
+          + "10.0.40.0/24",
+        ]
+      + dns_servers         = (known after apply)
+      + guid                = (known after apply)
+      + id                  = (known after apply)
+      + location            = "westeurope"
+      + name                = "vnet"
+      + resource_group_name = "rg-resources"
+      + subnet              = (known after apply)
+    }
+
+  # local_file.tf_ansible_kube_config will be created
+  + resource "local_file" "tf_ansible_kube_config" {
+      + content              = (sensitive value)
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0777"
+      + filename             = "/tmp/config"
+      + id                   = (known after apply)
+    }
+
+  # local_file.tf_ansible_vars will be created
+  + resource "local_file" "tf_ansible_vars" {
+      + content              = (sensitive value)
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0777"
+      + filename             = "../ansible/global_vars/tf_ansible_vars.yml"
+      + id                   = (known after apply)
+    }
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + acr_password       = (sensitive value)
+  + aks_ca_certificate = (sensitive value)
+  + aks_host           = (sensitive value)
+  + aks_id             = (known after apply)
+  + aks_password       = (sensitive value)
+  + aks_username       = (sensitive value)
+  + client_certificate = (sensitive value)
+  + client_key         = (sensitive value)
+  + kube_config        = (sensitive value)
+  + resource_group_id  = (known after apply)
+  + webservice_id      = (known after apply)
+  + webservice_pip     = (known after apply)
+
+azurerm_resource_group.rg: Creating...
+azurerm_resource_group.rg: Creation complete after 1s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources]
+azurerm_virtual_network.vnet: Creating...
+azurerm_network_security_group.webservice_nsg: Creating...
+azurerm_public_ip.webservice_pip: Creating...
+azurerm_container_registry.acr: Creating...
+azurerm_kubernetes_cluster.aks: Creating...
+azurerm_public_ip.webservice_pip: Creation complete after 3s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/publicIPAddresses/webservice-pip]
+azurerm_network_security_group.webservice_nsg: Creation complete after 5s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/networkSecurityGroups/webservice-nsg]
+azurerm_virtual_network.vnet: Creation complete after 5s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/virtualNetworks/vnet]
+azurerm_subnet.subnet: Creating...
+azurerm_container_registry.acr: Still creating... [10s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [10s elapsed]
+azurerm_subnet.subnet: Creation complete after 6s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/virtualNetworks/vnet/subnets/subnet]
+azurerm_network_interface.webservice_vnic: Creating...
+azurerm_network_interface.webservice_vnic: Creation complete after 1s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/networkInterfaces/webservice-vnic]
+azurerm_network_interface_security_group_association.webservice_nisga: Creating...
+azurerm_linux_virtual_machine.webservice: Creating...
+azurerm_network_interface_security_group_association.webservice_nisga: Creation complete after 1s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/networkInterfaces/webservice-vnic|/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Network/networkSecurityGroups/webservice-nsg]
+azurerm_container_registry.acr: Still creating... [20s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [20s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [10s elapsed]
+azurerm_container_registry.acr: Creation complete after 25s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.ContainerRegistry/registries/rraContainerRegistry]
+azurerm_kubernetes_cluster.aks: Still creating... [30s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [20s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [40s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [30s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [50s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [40s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [1m0s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [50s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [1m10s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [1m0s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [1m20s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [1m10s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [1m30s elapsed]
+azurerm_linux_virtual_machine.webservice: Still creating... [1m20s elapsed]
+azurerm_linux_virtual_machine.webservice: Creation complete after 1m23s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Compute/virtualMachines/webservice]
+local_file.tf_ansible_vars: Creating...
+local_file.tf_ansible_vars: Creation complete after 0s [id=8114044e6e6fcefe85f04a18059f619905c876d4]
+azurerm_kubernetes_cluster.aks: Still creating... [1m40s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [1m50s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [2m0s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [2m10s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [2m20s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [2m30s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [2m40s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [2m50s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [3m0s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [3m10s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [3m20s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [3m30s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [3m40s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [3m50s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [4m0s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [4m26s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [4m36s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [4m46s elapsed]
+azurerm_kubernetes_cluster.aks: Still creating... [4m56s elapsed]
+azurerm_kubernetes_cluster.aks: Creation complete after 4m57s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.ContainerService/managedClusters/aks]
+azurerm_role_assignment.ra: Creating...
+local_file.tf_ansible_kube_config: Creating...
+local_file.tf_ansible_kube_config: Creation complete after 0s [id=65ebcc387b2b9339880509582b152e963115dc78]
+azurerm_role_assignment.ra: Still creating... [10s elapsed]
+azurerm_role_assignment.ra: Still creating... [20s elapsed]
+azurerm_role_assignment.ra: Creation complete after 27s [id=/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.ContainerRegistry/registries/rraContainerRegistry/providers/Microsoft.Authorization/roleAssignments/c1c2aef6-b88e-f674-c86e-30f7b7761ed6]
+
+Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
+
+Outputs:
+acr_password = <sensitive>
+aks_ca_certificate = <sensitive>
+aks_host = <sensitive>
+aks_id = "/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.ContainerService/managedClusters/aks"
+aks_password = <sensitive>
+aks_username = <sensitive>
+client_certificate = <sensitive>
+client_key = <sensitive>
+kube_config = <sensitive>
+resource_group_id = "/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources"
+webservice_id = "/subscriptions/6e8564b1-19ba-492a-afd1-605b633924d2/resourceGroups/rg-resources/providers/Microsoft.Compute/virtualMachines/webservice"
+webservice_pip = "20.224.234.29"

@@ -66,7 +66,7 @@ Para poder acceder a los recursos generados por ssh: `ssh USER@IP -i .ssh/id_rsa
 
 #### Uso de imágenes
 
-Documentación sobre el uso de la ymagenes en Azule CLI:
+Documentación sobre el uso de las imagenes en Azure CLI:
 
 - https://learn.microsoft.com/es-es/cli/azure/vm/image?view=azure-cli-latest
 - https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage

@@ -5,7 +5,7 @@
 k8s_path: "/opt/sonar"
 
 # Path kube config.
-kube_config_path: "~/.kube/config"
+kube_config_path: "~/.kube/"
 
 # Temporary path for kube config.
 kube_config_temp: "/tmp/config"

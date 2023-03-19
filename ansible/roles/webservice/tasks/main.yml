@@ -144,6 +144,18 @@
       names: true
       container_prefix: "{{ container_prefix }}"
 
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html
+- name: Check webserver
+  ansible.builtin.uri:
+    url: "https://{{ tf_webservice_pip }}:8080"
+    user: "{{ username }}"
+    password: "{{ password }}"
+    method: GET
+    force_basic_auth: true
+    validate_certs: false
+    status_code: 200
+  ignore_errors: true
+
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
 - name: Remove the webserver temporary directory
   ansible.builtin.file:

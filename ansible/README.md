@@ -4,24 +4,22 @@
 
 The playbook has the following structure:
 
-- playbook.yml
-- playbook_ws_aks.yml
+- playbook.yml                         Playbook to install the necessary dependencies for ansible.
+- playbook_ws_aks.yml                  Playbook to install the webservices, postgres database and sonarqube.
 
 - environments
-    - development:                     Development environment.
-    - production:                      Production environment.
-
-- roles
-    - webservice:                      Deploy a basic webservice with a podman http container.
-    - postgresql:                      Deploy a postgresql database for SonarQube.
-    - sonarqube:                       Deploy SonarQube in a Azure AKS.
-
-## Global vars
+    - development                      Development environment.
+    - production                       Production environment.
 
 - global_vars
     - tf_ansible_vars.yml:             Outputs vars from Terraform.
         - tf_webservice_pip:           Public webservice IP.
         - tf_acr_password:             Azure container registry (ACR) pasword.
+
+- roles
+    - webservice                       Deploy a basic webservice with a podman http container.
+    - postgresql                       Deploy a postgresql database for SonarQube.
+    - sonarqube                        Deploy SonarQube in a Azure AKS.
 
 ## Vars
 
@@ -31,11 +29,26 @@ The playbook has the following structure:
     - db_password:                     Default password.
     - db_name:                         Default database.
 
-- roles/postgresql/handlers
-    - ansible_collection:              List of necessary collections.
-
 - roles/postgresql/vars
-    - ansible_collection:              List of necessary collections.
+    - db_user:                         PostgreSQL username for SonarQube.
+    - db_password:                     PostgreSQL password for SonarQube.
+    - db_name:                         PostgreSQL database name for SonarQube.
+
+- roles/sonarqube/defaults
+    - k8s_path:                        Path in which k8s deploy.
+    - kube_config_path:                Path kube config.
+    - kube_config_temp:                Temporary path for kube config.
+
+- roles/sonarqube/vars
+    - apt_packages:                    APT packages necessary to images (SonarQube).
+    - pip_packages:                    Python necessary packages for k8s.
+    - k8s_templates:                   Template k8s' name *.yaml.
+    - acr_url:                         URL for Azure Container Registry (ACR).
+    - tag_image:                       Tag for container image.
+    - k8s_namespace:                   The k8s namespace.
+    - deployment:                      The k8s Deployment yaml vars.
+    - svc:                             The k8s Service yaml vars.
+    - pvc:                             The k8s PersistentVolumeClaim yaml vars.
 
 - roles/webservice/defaults
     - username:                        Default username.
@@ -71,6 +84,39 @@ The playbook has the following structure:
     - acr_username:                    Username for Container Registry ACR.
     - acr_password:                    Password for ACR.
 
-## Encrypted files
+## Encrypted vars
 
-There isn't
+- roles/sonarqube/templates
+    - data.password:                   The PostgreSQL password in SonarQube secrets template.
+
+## Handlers
+
+- roles/postgresql/handlers
+    - Restart PostgreSQL.              Handler for restart postgres database service.
+
+## Files
+
+- roles/webservice/files
+    - index.html                       Default website page within authentication.
+
+## Templates
+
+- roles/sonarqube/templates
+    - sonar-data.yml.j2                Default website page with authentication.
+    - sonar-deployment.yml.j2
+    - sonar-extensions.yml.j2
+    - sonar-secret.yml.j2
+    - sonar-service.yml.j2
+
+- roles/webservice/templates
+    - .htaccess.j2                     Default website page with authentication.
+    - Containerfile.j2
+    - httpd.conf.j2
+
+## License
+
+Apache License Version 2.0             http://www.apache.org/licenses/
+
+## Author Information
+
+This playbook was developed by R2A
