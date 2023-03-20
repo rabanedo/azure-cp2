@@ -32,6 +32,7 @@
   vars_files:
     - global_vars/tf_ansible_vars.yml
   gather_facts: true
+  become: true
   roles:
     - sonarqube
   tags:

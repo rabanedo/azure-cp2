@@ -2,6 +2,11 @@
 
 Role to configure a podman image in a webserver
 
+## Requirements
+
+- global_vars
+    - tf_ansible_vars.yml:             Outputs vars from Terraform.
+
 ## Vars
 
 - roles/webservice/defaults

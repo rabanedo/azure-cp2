@@ -2,6 +2,11 @@
 
 Role to install and configure a sonarqube in an aks cluster
 
+## Requirements
+
+- global_vars
+    - tf_ansible_vars.yml:             Outputs vars from Terraform.
+
 ## Vars
 
 - roles/sonarqube/defaults

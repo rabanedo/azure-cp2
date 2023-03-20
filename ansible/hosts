@@ -1,0 +1,2 @@
+[webservice]
+webservice ansible_host=x.x.x.x ansible_user=azureuser ansible_python_interpreter="/usr/bin/env python3"

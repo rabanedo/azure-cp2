@@ -1,10 +1,11 @@
-# Playbook to deploy AKS + WS +ACR (Practical  Case II)
+# Playbook to deploy AKS + WS + ACR (Practical Case II)
 
 ## Structure
 
 The playbook has the following structure:
 
-- playbook.yml                         Playbook to install the necessary dependencies for ansible.
+- playbook_ansible.yml                 Playbook to install ansible-galaxy collection community.general for ansible.
+- playbook_galaxy.yml                  Playbook to install galaxy collections for ansible.
 - playbook_ws_aks.yml                  Playbook to install the webservices, postgres database and sonarqube.
 
 - environments
@@ -112,6 +113,14 @@ The playbook has the following structure:
     - .htaccess.j2                     Default website page with authentication.
     - Containerfile.j2
     - httpd.conf.j2
+
+## Example Playbook
+
+```
+    - hosts: webservice
+      roles:
+          - { role: webservice }
+```
 
 ## License
 
