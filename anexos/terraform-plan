@@ -4,15 +4,15 @@ To sign in, use a web browser to open the page https://microsoft.com/devicelogin
 [
   {
     "cloudName": "AzureCloud",
-    "homeTenantId": "899789dc-202f-44b4-8472-a6d40f9eb440",
-    "id": "6e8564b1-19ba-492a-afd1-605b633924d2",
+    "homeTenantId": "849789dc-202f-44b4-8472-a6d40f9eb440",
+    "id": "6e6554b1-19ba-492a-afd1-605b633924d2",
     "isDefault": true,
     "managedByTenants": [],
     "name": "Azure for Students",
     "state": "Enabled",
-    "tenantId": "899789dc-202f-44b4-8472-a6d40f9eb440",
+    "tenantId": "899769dc-202f-44b4-8472-a5d40f9eb440",
     "user": {
-      "name": "ruben.rabanedo433@comunidadunir.net",
+      "name": "xxx.yyy@comunidadunir.net",
       "type": "user"
     }
   }
